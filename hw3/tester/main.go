@@ -54,8 +54,8 @@ func main() {
 		close(wc)
 	}()
 
-	rcs := make([]<-chan result, runtime.NumCPU())
-	for i := 0; i < runtime.NumCPU(); i++ {
+	rcs := make([]<-chan result, runtime.NumCPU()/2)
+	for i := 0; i < runtime.NumCPU()/2; i++ {
 		rcs[i] = worker(wc)
 	}
 
@@ -146,7 +146,7 @@ func doWork(w work) result {
 	}
 
 	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Minute-5*time.Second)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, "./daf",
